@@ -42,10 +42,17 @@ def blink_error():
     for i in range(0, 10):
         GPIO.output(LED_PIN_RED, GPIO.HIGH)
         sleep(0.5)
-        GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+        GPIO.output(LED_PIN_RED, GPIO.LOW)
         sleep(0.5)
     return
 
+def blink_error_endless():
+    while(1):
+        GPIO.output(LED_PIN_RED, GPIO.HIGH)
+        sleep(0.5)
+        GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+        sleep(0.5)
+    return
 
 #red and green blink 5 times
 def blink_unregistered():
@@ -188,6 +195,6 @@ def do_my_stuff():
 if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(debug=True, use_reloader=False, host="0.0.0.0")).start()
     if do_my_stuff()==-1:
-        blink_error()
+        blink_error_endless()
 
 #flask run --host=0.0.0.0
