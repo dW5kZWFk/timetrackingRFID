@@ -24,7 +24,7 @@ def get_db_connection():
 #red led on for 2 sec
 def blink_log_out_success():
     GPIO.output(LED_PIN_RED, GPIO.HIGH)
-    sleep(2)
+    sleep(3)
     GPIO.output(LED_PIN_RED, GPIO.LOW)
     return
 
@@ -32,7 +32,7 @@ def blink_log_out_success():
 #green led on for 2 sec
 def blink_log_in_success():
     GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
-    sleep(2)
+    sleep(3)
     GPIO.output(LED_PIN_GREEN, GPIO.LOW)
     return
 
@@ -153,7 +153,7 @@ def do_my_stuff():
                 if state=='1':
                     try:
                         log_out(id)
-                        blink_log_in_success()
+                        blink_log_out_success()
                     except Exception as e:
                         print(e)
                         blink_error()
