@@ -101,8 +101,10 @@ def log_out(uid):
     #calculate work hours
     start_dt=datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S") # str to datetime
     end_dt= datetime.now()
-
-    work_hours=  end_dt.replace(second=0,microsecond=0) - start_dt.replace(second=0, microsecond=0)  #rounded difference
+    print(start_dt)
+    print(end_dt)
+    #work_hours=  end_dt.replace(second=0,microsecond=0) - start_dt.replace(second=0, microsecond=0)  #rounded difference
+    work_hours=end_dt-start_dt
     today=datetime.today().strftime('%d.%m.%Y')
 
     print(f'work_hours:{work_hours}')
