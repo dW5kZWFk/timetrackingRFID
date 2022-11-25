@@ -100,7 +100,7 @@ def log_out(uid):
     start_time=rows[0][0]
 
     #calculate work hours
-    work_hours= timedelta(start_time, datetime.now())
+    work_hours= start_time - datetime.now()
     print(work_hours)
     #write to db
     return
