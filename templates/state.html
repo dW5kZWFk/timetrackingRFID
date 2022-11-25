@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Arbeitszeit-Erfassung</title>
 </head>
 <body>
-
+<h1>Arbeitszeiterfassung:</h1>
+Derzeitig angemeldet
+{% for name in names %}
+    {{name.name}}
+{% endfor %}
 </body>
 </html>

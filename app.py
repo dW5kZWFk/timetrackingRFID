@@ -70,10 +70,15 @@ def blink_unregistered():
 #display info color code leds
 @app.route('/')
 def index():
+    conn = get_db_connection()
+    sql = f'SELECT name FROM employee_state WHERE state==1'
+    cur = conn.cursor()
+    rows = cur.execute(sql).fetchall()
+    conn.close()
+    return render_template('state.html',names=rows)
 
-    return render_template('state.html')
 
-
+#RFID functions..................................................................................
 #check whether employee is logged in or logged out
 def check_state(uid):
     conn = get_db_connection()
@@ -142,7 +147,7 @@ def log_out(uid):
     return
 
 #main loop..............................................................................................
-def do_my_stuff():
+def rfid_loop():
     print("scanning for cards")
     #register rfid scanner
     reader = SimpleMFRC522()
@@ -154,8 +159,9 @@ def do_my_stuff():
     GPIO.setup(LED_PIN_RED, GPIO.OUT)
 
     #toDo: following two lines should not be necessary
+    #(currently necessary for main looop crash exception if it's not handled via reboot)
     GPIO.output(LED_PIN_GREEN, GPIO.LOW)
-    GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+    GPIO.output(LED_PIN_RED, GPIO.LOW)
 
     try:
         while(1):
@@ -193,7 +199,10 @@ def do_my_stuff():
 
 if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(debug=True, use_reloader=False, host="0.0.0.0")).start()
-    if do_my_stuff()==-1:
+
+    try:
+        rfid_loop()
+    except Exception as e:
         blink_error_endless()
 
 #flask run --host=0.0.0.0
