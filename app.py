@@ -54,7 +54,7 @@ def blink_unregistered():
         GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
         sleep(0.5)
         GPIO.output(LED_PIN_GREEN, GPIO.LOW)
-        GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+        GPIO.output(LED_PIN_RED, GPIO.LOW)
         sleep(0.5)
     return
 
