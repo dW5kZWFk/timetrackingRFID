@@ -34,7 +34,7 @@ def do_my_stuff():
     LED_PIN_GREEN = 17
     LED_PIN_RED = 27
 
-    GPIO.setmode(GPIO.BCM)
+    #GPIO.setmode(GPIO.BCM)
     GPIO.setup(LED_PIN_GREEN, GPIO.OUT)
     GPIO.setup(LED_PIN_RED, GPIO.GREEN)
 
