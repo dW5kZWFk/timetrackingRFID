@@ -85,10 +85,12 @@ def check_state(uid):
 #log in / out..............................................................................................
 
 #changes employee state to (-> currently at work (1) / currently not at work (0))
-def change_employee_state(uid, state):
+def change_employee_state(uid, new_state):
     conn = get_db_connection()
 
-    sql = f'UPDATE employee_state set state = {state}, start_time=DateTime(\'now\',\'localtime\') WHERE uid=={uid}'
+
+    sql = f'UPDATE employee_state set state = {new_state}, start_time=DateTime(\'now\',\'localtime\') WHERE uid=={uid}'
+
     print(sql)
     cur = conn.cursor()
     cur.execute(sql)
@@ -98,12 +100,6 @@ def change_employee_state(uid, state):
 
 
 def log_out(uid):
-
-    #change employee state
-    try:
-        change_employee_state(uid, 0)
-    except Exception as e:
-        raise Exception
 
     #get start time
     conn = get_db_connection()
@@ -130,6 +126,13 @@ def log_out(uid):
     cur.execute(sql)
     conn.commit()
     conn.close()
+
+    #change employee state
+    try:
+        change_employee_state(uid, 0)
+    except Exception as e:
+        raise Exception
+
     return
 
 #main loop..............................................................................................
