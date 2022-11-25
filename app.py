@@ -75,7 +75,7 @@ def change_employee_state(uid, state):
     conn = get_db_connection()
 
     sql = f'UPDATE employee_state set state = {state}, start_time={datetime.now()} WHERE uid=={uid}'
-
+    print(sql)
     cur = conn.cursor()
     cur.execute(sql)
     conn.commit()
