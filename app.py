@@ -16,14 +16,36 @@ def get_db_connection():
     return conn
 
 
-#zeigt alle angemeldeten Nutzer
+#zeigt alle aktuell angemeldeten Nutzer
 @app.route('/')
 def index():
-    conn = get_db_connection()
-    posts = conn.execute('SELECT * FROM posts').fetchall()
-    conn.close()
-    print(posts[0]['title'])
+
     return render_template('status.html')
+
+
+#check whether employee is logged in or logged out
+def check_status(uid):
+    conn = get_db_connection()
+    sql = f'SELECT status FROM employee_status WHERE uid=={uid}'
+
+    cur = conn.cursor()
+    rows=cur.execute(sql).fetchall()
+    conn.close()
+
+    return rows[0][0]
+
+
+def change_status_arrived(uid):
+    conn = get_db_connection()
+
+    sql = f'UPDATE table employee_status set status = 1 WHERE uid=={uid}'
+
+    cur = conn.cursor()
+    cur.execute(sql)
+    conn.commit()
+    conn.close()
+    return 0
+
 
 def do_my_stuff():
     print("scanning for cards")
@@ -47,6 +69,9 @@ def do_my_stuff():
                 GPIO.output(LED_PIN_GREEN,GPIO.HIGH)
                 sleep(2)
                 GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+                print(check_status(id))
+
+
     except KeyboardInterrupt:
         GPIO.cleanup()
 
