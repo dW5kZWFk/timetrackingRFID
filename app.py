@@ -77,7 +77,7 @@ def check_state(uid):
     rows=cur.execute(sql).fetchone()
     conn.close()
 
-    if len(rows)==0: #unregistered tag-ID
+    if rows is None: #unregistered tag-ID
         return 'empty'
 
     return rows[0][0]
