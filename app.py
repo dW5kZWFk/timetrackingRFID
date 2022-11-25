@@ -97,6 +97,7 @@ def do_my_stuff():
 
                     except Exception as e:
                         blink_error()
+                        print("blink error")
 
                 if status==1:
                     print("already logged in")
