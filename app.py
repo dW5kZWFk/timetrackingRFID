@@ -36,7 +36,7 @@ def do_my_stuff():
 
     #GPIO.setmode(GPIO.BCM)
     GPIO.setup(LED_PIN_GREEN, GPIO.OUT)
-    GPIO.setup(LED_PIN_RED, GPIO.GREEN)
+    GPIO.setup(LED_PIN_RED, GPIO.OUT)
 
     while(1):
         id,_=reader.read()
