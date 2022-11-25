@@ -138,7 +138,7 @@ def do_my_stuff():
                         print(e)
                         blink_error()
 
-                if state==1:
+                if state=='1':
                     try:
                         log_out(id)
                         blink_log_in_success()
