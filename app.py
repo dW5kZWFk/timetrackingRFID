@@ -7,8 +7,7 @@ from flask import render_template
 import sqlite3
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
-from time import sleep
-
+from time import sleep, strptime
 
 app = Flask(__name__)
 
@@ -100,7 +99,7 @@ def log_out(uid):
     start_time=rows[0][0]
 
     #calculate work hours
-    work_hours= start_time - datetime.now()
+    work_hours= datetime.strptime(start_time, "Y-%m-%d %H:%M:%S") - datetime.now()
     print(work_hours)
     #write to db
     return
