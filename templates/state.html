@@ -2,13 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Arbeitszeit-Erfassung</title>
+    <title>RaspberryPI-RFID</title>
 </head>
 <body>
 <h1>Arbeitszeiterfassung:</h1>
-Derzeitig angemeldet
+<b>Derzeitig angemeldet:</b> <br>
 {% for name in names %}
-    {{name.name}}
+    <ul>
+        <li>{{name.name}}</li> <br>
+    </ul>
 {% endfor %}
+
+<br><br><br>
+<b>Farbcodes:</b>
+
+    <table>
+        <tr>
+            <th>Code</th>
+            <th>Bedeutung</th>
+        </tr>
+        <tr>
+            <td>grüne led an (3 sek)</td><td>Erfolgreich angemeldet</td>
+            <td>rote led an (3 sek)</td><td>Erfolgreich abgemeldet</td>
+            <td>grüne + rote led blinken </td><td>Tag / Karte nicht registriert</td>
+            <td>rote led blinkt 10 mal</td><td>Anmeldung / Abmeldung fehlgeschlagen</td>
+            <td>rote led blinkt fortlaufend</td><td>RFID-Reader-Thread abgestürzt (->Neustart erforderlich)</td>
+        </tr>
+    </table>
+<p>Anmelde / Abmelde -Status werden persistent u. unabhängig von Prozess gespeichert (-> Neustart erfordert keine erneute Anmeldung)</p>
 </body>
 </html>
