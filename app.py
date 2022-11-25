@@ -61,8 +61,9 @@ def blink_error():
 
     for i in range(0,10):
         GPIO.output(LED_PIN_RED, GPIO.HIGH)
-        sleep(1)
+        sleep(0.5)
         GPIO.output(LED_PIN_RED, GPIO.LOW)
+        sleep(0.5)
     return
 
 
@@ -98,11 +99,6 @@ def do_my_stuff():
                     except Exception as e:
                         print(e)
                         blink_error()
-                        print("blink error")
-                        for i in range(0, 10):
-                            GPIO.output(LED_PIN_RED, GPIO.HIGH)
-                            sleep(1)
-                            GPIO.output(LED_PIN_RED, GPIO.LOW)
 
                 if status==1:
                     print("already logged in")
