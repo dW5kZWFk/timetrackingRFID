@@ -38,15 +38,17 @@ def do_my_stuff():
     GPIO.setup(LED_PIN_GREEN, GPIO.OUT)
     GPIO.setup(LED_PIN_RED, GPIO.OUT)
 
-    while(1):
-        id,_=reader.read()
+    try:
+        while(1):
+            id,_=reader.read()
 
-        if id:
-            print(f'card detected: {id}')
-            GPIO.output(LED_PIN_GREEN,GPIO.HIGH)
-            sleep(2)
-            GPIO.output(LED_PIN_GREEN, GPIO.LOW)
-
+            if id:
+                print(f'card detected: {id}')
+                GPIO.output(LED_PIN_GREEN,GPIO.HIGH)
+                sleep(2)
+                GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+    except KeyboardInterrupt:
+        GPIO.cleanup()
 
 
 if __name__ == '__main__':
