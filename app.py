@@ -53,8 +53,8 @@ def blink_unregistered():
         GPIO.output(LED_PIN_RED, GPIO.HIGH)
         GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
         sleep(0.5)
-        GPIO.output(LED_PIN_GREEN, GPIO.LOW)
         GPIO.output(LED_PIN_RED, GPIO.LOW)
+        GPIO.output(LED_PIN_GREEN, GPIO.LOW)
         sleep(0.5)
     return
 
@@ -174,7 +174,8 @@ def do_my_stuff():
                         blink_error()
 
                 elif state=='empty':    #tag is not registered
-                        blink_unregistered()
+                    blink_unregistered()
+
 
     except KeyboardInterrupt:
         GPIO.cleanup()
