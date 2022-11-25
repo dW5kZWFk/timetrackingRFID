@@ -52,7 +52,7 @@ def change_status_arrived(uid):
 
 def blink_log_in_success():
     GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
-    sleep(2)
+    sleep(1)
     GPIO.output(LED_PIN_GREEN, GPIO.LOW)
     return
 
@@ -96,8 +96,13 @@ def do_my_stuff():
                         blink_log_in_success()
 
                     except Exception as e:
+                        print(e)
                         blink_error()
                         print("blink error")
+                        for i in range(0, 10):
+                            GPIO.output(LED_PIN_RED, GPIO.HIGH)
+                            sleep(1)
+                            GPIO.output(LED_PIN_RED, GPIO.LOW)
 
                 if status==1:
                     print("already logged in")
