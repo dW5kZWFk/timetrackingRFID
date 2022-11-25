@@ -86,7 +86,7 @@ def do_my_stuff():
                 status=check_status(id)
                 print(f'status:{status}')
 
-                if status==0:
+                if status=='0':
                     print("status is null!")
                     try:
                         change_status_arrived(id)
