@@ -99,8 +99,14 @@ def log_out(uid):
     start_time=rows[0][0]
 
     #calculate work hours
-    work_hours= datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S") - datetime.now()
-    print(work_hours)
+    start_dt=datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S") # str to datetime
+    end_dt= datetime.now()
+
+    work_hours= start_dt.replace(second=0, microsecond=0) - end_dt.replace(second=0,microsecond=0)  #rounded difference
+    today=datetime.today().strftime('%d.%m.%Y')
+
+    print(f'work_hours:{work_hours}')
+    print(f'today:{today}')
     #write to db
     return
 
