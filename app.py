@@ -84,9 +84,10 @@ def do_my_stuff():
             if id:
                 print(f'card detected: {id}')
                 status=check_status(id)
-                print(f'status:{id}')
+                print(f'status:{status}')
 
                 if status==0:
+                    print("status is null!")
                     try:
                         change_status_arrived(id)
                         blink_log_in_success()
