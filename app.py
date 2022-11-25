@@ -92,7 +92,7 @@ def log_out(uid):
 
     #get start time
     conn = get_db_connection()
-    sql = f'SELECT start_time FROM employee_state WHERE uid=={uid}'
+    sql = f'SELECT datetime(start_time,\'localtime\') FROM employee_state WHERE uid=={uid}'
 
     cur = conn.cursor()
     rows = cur.execute(sql).fetchall()
