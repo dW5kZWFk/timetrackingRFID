@@ -111,7 +111,7 @@ def log_out(uid):
     print(f'today:{today}')
 
     #write to db
-    sql=f'INSERT INTO working_time (uid,date,time) values({uid},{today},{work_hours})'
+    sql=f'INSERT INTO working_time (uid,date,time) values({uid},\'{today}\',\'{work_hours}\')'
     cur.execute(sql)
     conn.commit()
     conn.close()
