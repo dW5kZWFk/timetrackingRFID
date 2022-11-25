@@ -41,7 +41,7 @@ def check_status(uid):
 def change_status_arrived(uid):
     conn = get_db_connection()
 
-    sql = f'UPDATE table employee_status set status = 1, start_time=datetime(now) WHERE uid=={uid}'
+    sql = f'UPDATE employee_status set status = 1, start_time=datetime(now) WHERE uid=={uid}'
 
     cur = conn.cursor()
     cur.execute(sql)
