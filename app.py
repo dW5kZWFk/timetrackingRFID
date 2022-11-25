@@ -74,10 +74,10 @@ def check_state(uid):
     sql = f'SELECT state FROM employee_state WHERE uid=={uid}'
 
     cur = conn.cursor()
-    rows=cur.execute(sql).fetchall()
+    rows=cur.execute(sql).fetchone()
     conn.close()
 
-    if rows == None: #unregistered tag-ID
+    if len(rows)==0: #unregistered tag-ID
         return 'empty'
 
     return rows[0][0]
@@ -88,7 +88,7 @@ def check_state(uid):
 def change_employee_state(uid, state):
     conn = get_db_connection()
 
-    sql = f'UPDATE employee_state set state = {state}, start_time=DateTime(\'now\') WHERE uid=={uid}'
+    sql = f'UPDATE employee_state set state = {state}, start_time=DateTime(\'now\',\'localtime\') WHERE uid=={uid}'
     print(sql)
     cur = conn.cursor()
     cur.execute(sql)
@@ -107,7 +107,7 @@ def log_out(uid):
 
     #get start time
     conn = get_db_connection()
-    sql = f'SELECT datetime(start_time,\'localtime\') FROM employee_state WHERE uid=={uid}'
+    sql = f'SELECT datetime(start_time) FROM employee_state WHERE uid=={uid}'
 
     cur = conn.cursor()
     rows = cur.execute(sql).fetchall()
