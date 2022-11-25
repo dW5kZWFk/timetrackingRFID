@@ -42,7 +42,19 @@ def blink_error():
     for i in range(0, 10):
         GPIO.output(LED_PIN_RED, GPIO.HIGH)
         sleep(0.5)
-        GPIO.output(LED_PIN_RED, GPIO.LOW)
+        GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+        sleep(0.5)
+    return
+
+
+#red and green blink 5 times
+def blink_unregistered():
+    for i in range(0, 5):
+        GPIO.output(LED_PIN_RED, GPIO.HIGH)
+        GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
+        sleep(0.5)
+        GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+        GPIO.output(LED_PIN_GREEN, GPIO.LOW)
         sleep(0.5)
     return
 
@@ -64,6 +76,9 @@ def check_state(uid):
     cur = conn.cursor()
     rows=cur.execute(sql).fetchall()
     conn.close()
+
+    if rows == None: #unregistered tag-ID
+        return 'empty'
 
     return rows[0][0]
 
@@ -141,7 +156,7 @@ def do_my_stuff():
                 print(f'card detected: {id}')
                 state=check_state(id)
 
-                if state=='0':
+                if state=='0':      #proceed with log in
                     try:
                         change_employee_state(id, 1)
                         blink_log_in_success()
@@ -150,7 +165,7 @@ def do_my_stuff():
                         print(e)
                         blink_error()
 
-                if state=='1':
+                elif state=='1':    #proceed with log out
                     try:
                         log_out(id)
                         blink_log_out_success()
@@ -158,6 +173,8 @@ def do_my_stuff():
                         print(e)
                         blink_error()
 
+                elif state=='empty':    #tag is not registered
+                        blink_unregistered()
 
     except KeyboardInterrupt:
         GPIO.cleanup()
