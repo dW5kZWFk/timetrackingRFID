@@ -31,10 +31,10 @@ def do_my_stuff():
     reader = SimpleMFRC522()
 
     #register leds
-    LED_PIN_GREEN = 17
-    LED_PIN_RED = 27
+    #SimpleMFRC522 uses GPIO BOARD Mode !
+    LED_PIN_GREEN = 11 #17 BCM
+    LED_PIN_RED = 13    #27 BCM
 
-    #GPIO.setmode(GPIO.BCM)
     GPIO.setup(LED_PIN_GREEN, GPIO.OUT)
     GPIO.setup(LED_PIN_RED, GPIO.OUT)
 
