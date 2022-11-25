@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import threading
+from datetime import datetime, timedelta
+
 from flask import Flask
 from flask import render_template
 import sqlite3
@@ -19,17 +21,46 @@ def get_db_connection():
     return conn
 
 
-#zeigt alle aktuell angemeldeten Nutzer
+#blink codes.................................................................................
+#red led on for 2 sec
+def blink_log_out_success():
+    GPIO.output(LED_PIN_RED, GPIO.HIGH)
+    sleep(2)
+    GPIO.output(LED_PIN_RED, GPIO.LOW)
+    return
+
+
+#green led on for 2 sec
+def blink_log_in_success():
+    GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
+    sleep(2)
+    GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+    return
+
+
+#red led blinks 10 times
+def blink_error():
+    for i in range(0, 10):
+        GPIO.output(LED_PIN_RED, GPIO.HIGH)
+        sleep(0.5)
+        GPIO.output(LED_PIN_RED, GPIO.LOW)
+        sleep(0.5)
+    return
+
+#views........................................................................................
+
+#display employees currently at work
+#display info color code leds
 @app.route('/')
 def index():
 
-    return render_template('status.html')
+    return render_template('state.html')
 
 
 #check whether employee is logged in or logged out
-def check_status(uid):
+def check_state(uid):
     conn = get_db_connection()
-    sql = f'SELECT status FROM employee_status WHERE uid=={uid}'
+    sql = f'SELECT state FROM employee_state WHERE uid=={uid}'
 
     cur = conn.cursor()
     rows=cur.execute(sql).fetchall()
@@ -37,11 +68,13 @@ def check_status(uid):
 
     return rows[0][0]
 
+#log in / out..............................................................................................
 
-def change_status_arrived(uid):
+#changes employee state to (-> currently at work (1) / currently not at work (0))
+def change_employee_state(uid, state):
     conn = get_db_connection()
 
-    sql = f'UPDATE employee_status set status = 1, start_time=datetime(now) WHERE uid=={uid}'
+    sql = f'UPDATE employee_state set state = {state}, start_time={datetime.now()} WHERE uid=={uid}'
 
     cur = conn.cursor()
     cur.execute(sql)
@@ -50,23 +83,29 @@ def change_status_arrived(uid):
     return 0
 
 
-def blink_log_in_success():
-    GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
-    sleep(1)
-    GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+def log_out(uid):
+
+    #change employee state
+    try:
+        change_employee_state(uid, 0)
+    except Exception as e:
+        raise Exception
+
+    #get start time
+    conn = get_db_connection()
+    sql = f'SELECT start_time FROM employee_state WHERE uid=={uid}'
+
+    cur = conn.cursor()
+    rows = cur.execute(sql).fetchall()
+    start_time=rows[0][0]
+
+    #calculate work hours
+    work_hours= timedelta(start_time, datetime.now())
+    print(work_hours)
+    #write to db
     return
 
-
-def blink_error():
-
-    for i in range(0,10):
-        GPIO.output(LED_PIN_RED, GPIO.HIGH)
-        sleep(0.5)
-        GPIO.output(LED_PIN_RED, GPIO.LOW)
-        sleep(0.5)
-    return
-
-
+#main loop..............................................................................................
 def do_my_stuff():
     print("scanning for cards")
     #register rfid scanner
@@ -78,6 +117,7 @@ def do_my_stuff():
     GPIO.setup(LED_PIN_GREEN, GPIO.OUT)
     GPIO.setup(LED_PIN_RED, GPIO.OUT)
 
+    #toDo: following two lines should not be necessary
     GPIO.output(LED_PIN_GREEN, GPIO.LOW)
     GPIO.output(LED_PIN_GREEN, GPIO.LOW)
 
@@ -87,23 +127,25 @@ def do_my_stuff():
 
             if id:
                 print(f'card detected: {id}')
-                status=check_status(id)
-                print(f'status:{status}')
+                state=check_state(id)
 
-                if status=='0':
-                    print("status is null!")
+                if state=='0':
                     try:
-                        change_status_arrived(id)
+                        change_employee_state(id, 1)
                         blink_log_in_success()
 
                     except Exception as e:
                         print(e)
                         blink_error()
 
-                if status==1:
-                    print("already logged in")
-                    blink_log_in_success()
-                    blink_log_in_success()
+                if state==1:
+                    try:
+                        log_out(id)
+                        blink_log_in_success()
+                    except Exception as e:
+                        print(e)
+                        blink_error()
+
 
     except KeyboardInterrupt:
         GPIO.cleanup()
