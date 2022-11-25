@@ -61,7 +61,7 @@ def blink_error():
 
     for i in range(0,10):
         GPIO.output(LED_PIN_RED, GPIO.HIGH)
-        sleep(0.5)
+        sleep(1)
         GPIO.output(LED_PIN_RED, GPIO.LOW)
     return
 
