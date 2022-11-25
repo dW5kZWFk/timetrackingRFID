@@ -50,9 +50,8 @@ def blink_error_endless():
     while(1):
         GPIO.output(LED_PIN_RED, GPIO.HIGH)
         sleep(0.5)
-        GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+        GPIO.output(LED_PIN_RED, GPIO.LOW)
         sleep(0.5)
-    return
 
 #red and green blink 5 times
 def blink_unregistered():
