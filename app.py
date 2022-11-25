@@ -10,6 +10,9 @@ from time import sleep
 
 app = Flask(__name__)
 
+LED_PIN_GREEN = 11  #17 BCM
+LED_PIN_RED = 13  #27 BCM
+
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -38,13 +41,29 @@ def check_status(uid):
 def change_status_arrived(uid):
     conn = get_db_connection()
 
-    sql = f'UPDATE table employee_status set status = 1 WHERE uid=={uid}'
+    sql = f'UPDATE table employee_status set status = 1, start_time=datetime(now) WHERE uid=={uid}'
 
     cur = conn.cursor()
     cur.execute(sql)
     conn.commit()
     conn.close()
     return 0
+
+
+def blink_log_in_success():
+    GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
+    sleep(2)
+    GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+    return
+
+
+def blink_error():
+
+    for i in range(0,10):
+        GPIO.output(LED_PIN_RED, GPIO.HIGH)
+        sleep(0.5)
+        GPIO.output(LED_PIN_RED, GPIO.LOW)
+    return
 
 
 def do_my_stuff():
@@ -54,8 +73,6 @@ def do_my_stuff():
 
     #register leds
     #SimpleMFRC522 uses GPIO BOARD Mode !
-    LED_PIN_GREEN = 11 #17 BCM
-    LED_PIN_RED = 13    #27 BCM
 
     GPIO.setup(LED_PIN_GREEN, GPIO.OUT)
     GPIO.setup(LED_PIN_RED, GPIO.OUT)
@@ -66,18 +83,28 @@ def do_my_stuff():
 
             if id:
                 print(f'card detected: {id}')
-                GPIO.output(LED_PIN_GREEN,GPIO.HIGH)
-                sleep(2)
-                GPIO.output(LED_PIN_GREEN, GPIO.LOW)
-                print(check_status(id))
+                status=check_status(id)
+                print(f'status:{id}')
 
+                if status==0:
+                    try:
+                        change_status_arrived(id)
+                        blink_log_in_success()
+
+                    except Exception as e:
+                        blink_error()
+
+                if status==1:
+                    print("already logged in")
+                    blink_log_in_success()
+                    blink_log_in_success()
 
     except KeyboardInterrupt:
         GPIO.cleanup()
 
 
 if __name__ == '__main__':
-    threading.Thread(target=lambda: app.run(debug=True, use_reloader=False)).start()
+    threading.Thread(target=lambda: app.run(debug=True, use_reloader=False, host="0.0.0.0")).start()
     do_my_stuff()
 
 #flask run --host=0.0.0.0
