@@ -103,13 +103,18 @@ def log_out(uid):
     end_dt= datetime.now()
     print(start_dt)
     print(end_dt)
-    #work_hours=  end_dt.replace(second=0,microsecond=0) - start_dt.replace(second=0, microsecond=0)  #rounded difference
-    work_hours=end_dt-start_dt
+    work_hours=  end_dt.replace(second=0,microsecond=0) - start_dt.replace(second=0, microsecond=0)  #rounded difference
+    #work_hours=end_dt-start_dt
     today=datetime.today().strftime('%d.%m.%Y')
 
     print(f'work_hours:{work_hours}')
     print(f'today:{today}')
+
     #write to db
+    sql=f'INSERT INTO working_time (uid,date,time) values({uid},{today},{work_hours})'
+    cur.execute(sql)
+    conn.commit()
+    conn.close()
     return
 
 #main loop..............................................................................................
