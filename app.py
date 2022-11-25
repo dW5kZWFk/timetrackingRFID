@@ -178,6 +178,7 @@ def do_my_stuff():
 
                 elif state=='empty':    #tag is not registered
                     blink_unregistered()
+                    return -1
 
 
     except KeyboardInterrupt:
@@ -186,6 +187,7 @@ def do_my_stuff():
 
 if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(debug=True, use_reloader=False, host="0.0.0.0")).start()
-    do_my_stuff()
+    if do_my_stuff()==-1:
+        blink_error()
 
 #flask run --host=0.0.0.0
