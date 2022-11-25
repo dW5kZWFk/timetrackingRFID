@@ -77,6 +77,9 @@ def do_my_stuff():
     GPIO.setup(LED_PIN_GREEN, GPIO.OUT)
     GPIO.setup(LED_PIN_RED, GPIO.OUT)
 
+    GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+    GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+
     try:
         while(1):
             id,_=reader.read()
