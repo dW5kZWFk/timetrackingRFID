@@ -42,48 +42,48 @@
 <body>
 
 <div class="d-flex justify-content-center align-items-center mt-5">
-<div class="container w-50 d-flex">
- <div class="row mt-5 mb-5 d-flex">
-<button type="button" class="btn btn-outline-dark mt-5 w-50" id="generate_csv" data-bs-toggle="tooltip" onclick="save_csv_ajax();" data-bs-placement="bottom">
-                    <i class="feather-16" data-feather="file-plus"></i> CSV-Datei erzeugen
-</button>
-</div>
+    <div class="container w-50">
 
- <div id="csv_download_link" class="row mt-5 mb-5 d-flex" style="display:none;">
+        <div class="row mt-5 mb-5 d-flex">
+            <button type="button" class="btn btn-outline-dark mt-5 w-50" id="generate_csv" data-bs-toggle="tooltip" onclick="save_csv_ajax();" data-bs-placement="bottom">
+               <i class="feather-16" data-feather="file-plus"></i> CSV-Datei erzeugen
+            </button>
+        </div>
+
+        <div id="csv_download_link" class="row mt-5 mb-5 d-flex" style="display:none;">
             <button type="button" class="btn btn-outline-dark w-50"  data-bs-toggle="tooltip" onclick="show_reset_table();" data-bs-placement="bottom">
                  <a style="text-decoration:none;" href="{{ url_for('working_time')}}"> <i class="feather-16" data-feather="download"></i> Download</a>
             </button>
- </div>
+        </div>
 
 
-<div id="reset_worktime_table" class="row mt-5 d-flex" style="display:none;">
-
-        <button type="button" class="btn btn-danger w-50"  data-bs-toggle="modal" data-bs-target="#confirmModal">
+        <div id="reset_worktime_table" class="row mt-5 d-flex" style="display:none;">
+            <button type="button" class="btn btn-danger w-50"  data-bs-toggle="modal" data-bs-target="#confirmModal">
                   <i class="feather-16" data-feather="alert-triangle"></i>  Tabelle mit Arbeitszeiten leeren
-        </button>
-</div>
+            </button>
+        </div>
 
-    <div class="modal" tabindex="-1"  id="confirmModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Aktion bestätigen</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Alle bisher erfassten Arbeitszeiten werden gelöscht.</p>
-      </div>
-      <div class="modal-footer d-flex justify-content-between">
-        <form method="POST">
-            <button type="submit" name="reset_worktime" class="btn btn-primary">Bestätigen</button>
-        </form>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
-      </div>
+        <div class="modal" tabindex="-1"  id="confirmModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Aktion bestätigen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Alle bisher erfassten Arbeitszeiten werden gelöscht.</p>
+              </div>
+              <div class="modal-footer d-flex justify-content-between">
+                <form method="POST">
+                    <button type="submit" name="reset_worktime" class="btn btn-primary">Bestätigen</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
     </div>
-  </div>
-</div>
-
-</div>
 </div>
 
 
