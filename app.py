@@ -4,7 +4,7 @@ import os
 import threading
 from datetime import datetime, timedelta
 
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, jsonify, Response
 from flask import render_template
 import sqlite3
 from mfrc522 import SimpleMFRC522
@@ -81,13 +81,21 @@ def index():
 
 @app.route('/YWRtaW4', methods=['GET'])
 def admin_view():
-    conn=get_db_connection()
-    sql=f'SELECT date, name, time from working_time left join employee_state on working_time.employee_uid = employee_state.uid'
+
+
+    return render_template('admin.html')
+
+
+#ajax-csv-functions.............................................................................
+@app.route('/create_csv_ajax', methods=['GET'])
+def create_csv_ajax():
+    conn = get_db_connection()
+    sql = f'SELECT date, name, time from working_time left join employee_state on working_time.employee_uid = employee_state.uid'
     cur = conn.cursor()
     rows = cur.execute(sql).fetchall()
     conn.close()
 
-    col_labels=['Datum', 'Name', 'Arbeitszeit']
+    col_labels = ['Datum', 'Name', 'Arbeitszeit']
 
     #write csv:
     with open('working_time_export.csv', 'w', newline='') as csvfile:
@@ -96,11 +104,13 @@ def admin_view():
         for row in rows:
             csvwriter.writerow(row)
 
-    csv_path='working_time_export.csv'
-    return send_file(csv_path,as_attachment=True)
+    return jsonify("success")
 
-
-
+@app.route('/download_working_time_csv', methods=['GET'])
+def download():
+    with open("working_time_export.csv", "r") as fp:
+         csv = fp.read()
+    return Response(csv, mimetype="text/csv")
 
 #RFID functions..................................................................................
 #check whether employee is logged in or logged out
