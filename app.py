@@ -126,10 +126,10 @@ def register():
         try:
             while(1):
                 print("huh")
-                GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
-                sleep(0.5)
-                GPIO.output(LED_PIN_GREEN, GPIO.LOW)
-                sleep(0.5)
+                #GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
+                #sleep(0.5)
+                #GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+                #sleep(0.5)
                 try:
                     new_id, _ = reader.read()
                     print(id)
