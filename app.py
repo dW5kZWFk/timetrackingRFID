@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import csv
+import os
 import threading
 from datetime import datetime, timedelta
 
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flask import render_template
 import sqlite3
 from mfrc522 import SimpleMFRC522
@@ -78,21 +79,26 @@ def index():
     conn.close()
     return render_template('state.html',names=rows)
 
-#@app.route('/YWRtaW4', methods=['GET'])
-#def admin_view():
-#
-#    conn=get_db_connection()
-#    sql=f'SELECT employee_uid, date, worktime from working_time'
-#    cur = conn.cursor()
-#    rows = cur.execute(sql).fetchall()
-#
-#    #write csv:
-#    with open('inventory_export.csv', 'w', newline='') as csvfile:
-#        csvwriter = csv.writer(csvfile, delimiter=',')
-#        csvwriter.writerow(col_labels)
-#        for row in results:
-#            csvwriter.writerow(row)
-#    return render_template('admin.html')
+@app.route('/YWRtaW4', methods=['GET'])
+def admin_view():
+    conn=get_db_connection()
+    sql=f'SELECT date, name, time from working_time left join employee_state on working_time.employee_uid = employee_state.uid'
+    cur = conn.cursor()
+    rows = cur.execute(sql).fetchall()
+    conn.close()
+
+    col_labels=['Datum', 'Name', 'Arbeitszeit']
+
+    #write csv:
+    with open('working_time_export.csv', 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter.writerow(col_labels)
+        for row in rows:
+            csvwriter.writerow(row)
+
+    csv_path='working_time_export.csv'
+    return send_file(csv_path,as_attachment=True)
+
 
 
 
