@@ -6,24 +6,36 @@ from datetime import datetime, timedelta
 
 from flask import Flask, request, send_file, jsonify, Response, flash, redirect
 from flask import render_template
+from flask_httpauth import HTTPBasicAuth
 import sqlite3
 from mfrc522 import SimpleMFRC522
 import RPi.GPIO as GPIO
 from time import sleep, strptime
 
+from werkzeug.security import generate_password_hash, check_password_hash
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '76423486360973543216824'
-#
+
 LED_PIN_GREEN = 11  #17 BCM
 LED_PIN_RED = 13  #27 BCM
 
+auth = HTTPBasicAuth()
+
+users = {
+    "nico": generate_password_hash("wU900#X6UToc")
+}
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
-
+@auth.verify_password
+def verify_password(username, password):
+    if username in users and \
+            check_password_hash(users.get(username), password):
+        return username
 #blink codes.................................................................................
 #red led on for 2 sec
 def blink_log_out_success():
@@ -86,6 +98,7 @@ def index():
 
 
 @app.route('/YWRtaW4', methods=['GET', 'POST'])
+@auth.login_required
 def admin_view():
     if request.method == "POST" and "reset_worktime" in request.form:
         conn = get_db_connection()
