@@ -86,7 +86,7 @@ def index():
 
 @app.route('/YWRtaW4', methods=['GET', 'POST'])
 def admin_view():
-    if request.method == "POST" and "reset_worktime" in "request_form":
+    if request.method == "POST" and "reset_worktime" in request.form:
         conn = get_db_connection()
         sql = f'DELETE * from working_time'
         cur = conn.cursor()
