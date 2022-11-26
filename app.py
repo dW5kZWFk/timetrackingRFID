@@ -125,10 +125,10 @@ def register():
         try:
             while(1):
                 print("huh")
-                #GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
-                #sleep(0.5)
-                #GPIO.output(LED_PIN_RED, GPIO.LOW)
-                #sleep(0.5)
+                GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
+                sleep(0.5)
+                GPIO.output(LED_PIN_RED, GPIO.LOW)
+                sleep(0.5)
                 try:
                     id, _ = reader.read()
                     print(id)
@@ -136,22 +136,22 @@ def register():
                     print(e)
                     blink_error()
 
-                    if id:
-                        #prüfen ob Tag-ID bereits vergeben ist
-                        if check_state(id) != "empty":
-                            flash("Tag/Karte ist bereits registriert", "danger")
-                        #toDo: Prüfen, ob Name bereits vergeben ist
+                if id:
+                    #prüfen ob Tag-ID bereits vergeben ist
+                    if check_state(id) != "empty":
+                        flash("Tag/Karte ist bereits registriert", "danger")
+                    #toDo: Prüfen, ob Name bereits vergeben ist
 
-                        else:
-                            conn=get_db_connection()
-                            cur=conn.cursor()
-                            name=request.form.get("employee_name")
-                            sql = f'INSERT INTO working_time (employee_uid,date,time) values(?)'
-                            cur.execute(sql,(name))
-                            conn.commit()
-                            conn.close()
-                            flash(f'Tag/Karte wurde für {name} registriert.',"success")
-                        return redirect("register.html")
+                    else:
+                        conn=get_db_connection()
+                        cur=conn.cursor()
+                        name=request.form.get("employee_name")
+                        sql = f'INSERT INTO working_time (employee_uid,date,time) values(?)'
+                        cur.execute(sql,(name))
+                        conn.commit()
+                        conn.close()
+                        flash(f'Tag/Karte wurde für {name} registriert.',"success")
+                    return redirect("register.html")
 
 
         except Exception:
