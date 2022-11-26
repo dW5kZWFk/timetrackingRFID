@@ -116,62 +116,6 @@ def admin_view():
 
     return render_template('admin.html')
 
-
-@app.route('/register',methods=['GET','POST'])
-@auth.login_required
-def register():
-    global stop_scanner
-    if request.method=="POST" and "employee_name" in request.form:
-        new_reader=SimpleMFRC522()
-        #destroy rfid loop
-        stop_scanner=True
-        GPIO.setmode(GPIO.BOARD)
-        #toDO: check for existing names
-        try:
-            while(1):
-                print("huh")
-                GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
-                sleep(0.5)
-                GPIO.output(LED_PIN_GREEN, GPIO.LOW)
-                sleep(0.5)
-                try:
-                    new_id, _ = new_reader.read()
-                    print(id)
-                except Exception as e:
-                    print(e)
-                    blink_error()
-
-                if new_id:
-                    #prüfen ob Tag-ID bereits vergeben ist
-                    if check_state(new_id) != "empty":
-                        flash("Tag/Karte ist bereits registriert", "danger")
-                    #toDo: Prüfen, ob Name bereits vergeben ist
-
-                    else:
-                        conn=get_db_connection()
-                        cur=conn.cursor()
-                        name=request.form.get("employee_name")
-                        sql = f'INSERT INTO working_time (employee_uid,date,time) values(?)'
-                        cur.execute(sql,(name))
-                        conn.commit()
-                        conn.close()
-                        flash(f'Tag/Karte wurde für {name} registriert.',"success")
-
-                    #restart rfid loop:
-                    GPIO.cleanup()
-                    stop_scanner = False
-                    rfid_loop()
-                    return redirect("register.html")
-
-
-        except Exception as e:
-            print(e)
-            GPIO.cleanup()
-            stop_scanner = False
-            rfid_loop()
-            flash("Unspezifische Fehlermeldung (register user Loop).","danger")
-    return render_template("register.html")
-
 #ajax-csv-functions.............................................................................
 @app.route('/create_csv_ajax', methods=['GET'])
 def create_csv_ajax():
@@ -287,18 +231,13 @@ def rfid_loop():
     GPIO.output(LED_PIN_RED, GPIO.LOW)
 
     try:
+
+        try:
+            id, _ = reader.read()
+        except Exception as e:
+            blink_error()
+
         while (1):
-
-            #leave loop when user registration is called via flask server
-            if stop_scanner:
-                GPIO.cleanup()
-                print("stopped reader")
-                break
-
-            try:
-                id, _ = reader.read()
-            except Exception as e:
-                blink_error()
 
 
             if id:
