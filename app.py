@@ -155,7 +155,8 @@ def register():
                     return redirect("register.html")
 
 
-        except Exception:
+        except Exception as e:
+            print(e)
             flash("Unspezifische Fehlermeldung (register user Loop).","danger")
     return render_template("register.html")
 
