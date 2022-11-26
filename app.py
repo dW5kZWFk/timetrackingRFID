@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+import csv
 import threading
 from datetime import datetime, timedelta
 
-from flask import Flask
+from flask import Flask, request
 from flask import render_template
 import sqlite3
 from mfrc522 import SimpleMFRC522
@@ -76,6 +77,23 @@ def index():
     rows = cur.execute(sql).fetchall()
     conn.close()
     return render_template('state.html',names=rows)
+
+@app.route('/YWRtaW4', methods=['GET'])
+def admin_view():
+
+    conn=get_db_connection()
+    sql=f'SELECT uid, date, worktime from working_time'
+    cur = conn.cursor()
+    rows = cur.execute(sql).fetchall()
+
+    #write csv:
+    with open('inventory_export.csv', 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter.writerow(col_labels)
+        for row in results:
+            csvwriter.writerow(row)
+    return render_template('admin.html')
+
 
 
 #RFID functions..................................................................................

@@ -1,2 +1,3 @@
-CREATE TABLE employee_state (id int primary key, uid int not null, start_time [timestamp], name text, state text);
-CREATE TABLE working_time (id int, uid int, date text, time text);
+CREATE TABLE employee_state (uid int primary key, start_time [timestamp], name text, state text);
+CREATE TABLE working_time (id int, employee_uid int, date text, time text, FOREIGN KEY(employee_uid) REFERENCES employee_state(uid));
+55396084254
