@@ -42,31 +42,28 @@
 <body>
 
 <div class="d-flex justify-content-center align-items-center mt-5">
-<div class="container w-50">
- <div class="row mt-5 mb-5" >
+<div class="container w-50 d-flex">
+ <div class="row mt-5 mb-5 d-flex justify-content-center">
 <button type="button" class="btn btn-outline-dark mt-5 w-50" id="generate_csv" data-bs-toggle="tooltip" onclick="save_csv_ajax();" data-bs-placement="bottom">
                     <i class="feather-16" data-feather="file-plus"></i> CSV-Datei erzeugen
 </button>
 </div>
 
- <div id="csv_download_link" class="row mt-5 mb-5" style="display:none;">
+ <div id="csv_download_link" class="row mt-5 mb-5 d-flex justify-content-center" style="display:none;">
             <button type="button" class="btn btn-outline-dark w-50"  data-bs-toggle="tooltip" onclick="show_reset_table();" data-bs-placement="bottom">
                  <a style="text-decoration:none;" href="{{ url_for('working_time')}}"> <i class="feather-16" data-feather="download"></i> Download</a>
             </button>
  </div>
 
 
-<div id="reset_worktime_table" class="row mt-5" style="display:none;">
+<div id="reset_worktime_table" class="row mt-5 d-flex justify-content-center" style="display:none;">
 
         <button type="button" class="btn btn-danger w-50"  data-bs-toggle="modal" data-bs-target="#confirmModal">
                   <i class="feather-16" data-feather="alert-triangle"></i>  Tabelle mit Arbeitszeiten leeren
         </button>
 </div>
 
-</div>
-</div>
-
-<div class="modal" tabindex="-1">
+    <div class="modal" tabindex="-1">
   <div class="modal-dialog" id="confirmModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -85,6 +82,11 @@
     </div>
   </div>
 </div>
+
+</div>
+</div>
+
+
 
 </body>
 
