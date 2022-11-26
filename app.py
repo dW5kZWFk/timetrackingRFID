@@ -139,19 +139,19 @@ def register():
                         else:
                             conn=get_db_connection()
                             cur=conn.cursor()
-                            values=(request.form.get("employee_name"))
+                            name=request.form.get("employee_name")
                             sql = f'INSERT INTO working_time (employee_uid,date,time) values(?)'
-                            cur.execute(sql,values)
+                            cur.execute(sql,(name))
                             conn.commit()
                             conn.close()
+                            flash(f'Tag/Karte wurde für {name} registriert.',"success")
+                        return redirect("register.html")
                 except Exception as e:
                     blink_error()
 
-
-
-
         except Exception:
             flash("Unspezifische Fehlermeldung (register user Loop).","danger")
+    return render_template("register.html")
 
 #ajax-csv-functions.............................................................................
 @app.route('/create_csv_ajax', methods=['GET'])
