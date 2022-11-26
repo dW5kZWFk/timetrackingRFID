@@ -131,6 +131,8 @@ def register():
                 #sleep(0.5)
                 try:
                     id, _ = reader.read()
+                except Exception as e:
+                    blink_error()
 
                     if id:
                         #prüfen ob Tag-ID bereits vergeben ist
@@ -148,8 +150,7 @@ def register():
                             conn.close()
                             flash(f'Tag/Karte wurde für {name} registriert.',"success")
                         return redirect("register.html")
-                except Exception as e:
-                    blink_error()
+
 
         except Exception:
             flash("Unspezifische Fehlermeldung (register user Loop).","danger")
