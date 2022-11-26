@@ -9,21 +9,23 @@
 </head>
 <body>
 
-<div class="d-flex align-content-center">
+<div class="d-flex align-content-center justify-content-center">
 <fieldset>
-<legend>Arbeitszeiterfassung:</legend>
+<legend class="lead">Arbeitszeiterfassung</legend>
 
-        <b>Derzeitig angemeldet:</b> <br>
+    <div class="mb-3 mt-3">
+        <h4>Derzeitig angemeldet:</h4> <br>
         {% for name in names %}
             <ul>
                 <li>{{name.name}}</li> <br>
             </ul>
         {% endfor %}
+    </div>
 
-        <br><br><br>
-        <b>Farbcodes:</b>
+    <div class="mb-3 mt-3">
+        <h4>Farbcodes:</h4>
 
-            <table class="table">
+            <table class="table border border-dark mb-2">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Code</th>
@@ -48,7 +50,8 @@
                 </tr>
             </tbody>
             </table>
-        <p>Anmelde / Abmelde -Status werden persistent u. unabhängig von Prozess gespeichert (-> Neustart erfordert keine erneute Anmeldung)</p>
+        <small><p>Anmelde / Abmelde -Status werden persistent u. unabhängig von Prozess gespeichert (-> Neustart erfordert keine erneute Anmeldung)</p></small>
+    </div>
 </fieldset>
 </div>
 </body>
