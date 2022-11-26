@@ -122,7 +122,7 @@ def admin_view():
 def register():
     global stop_scanner
     if request.method=="POST" and "employee_name" in request.form:
-
+        new_reader=SimpleMFRC522()
         #destroy rfid loop
         stop_scanner=True
         GPIO.setmode(GPIO.BOARD)
@@ -135,7 +135,7 @@ def register():
                 GPIO.output(LED_PIN_GREEN, GPIO.LOW)
                 sleep(0.5)
                 try:
-                    new_id, _ = reader.read()
+                    new_id, _ = new_reader.read()
                     print(id)
                 except Exception as e:
                     print(e)
@@ -292,6 +292,7 @@ def rfid_loop():
             #leave loop when user registration is called via flask server
             if stop_scanner:
                 GPIO.cleanup()
+                print("stopped reader")
                 break
 
             try:
