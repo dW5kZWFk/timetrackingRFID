@@ -228,7 +228,11 @@ def rfid_loop():
 
     try:
         while (1):
-            id, _ = reader.read()
+            try:
+                id, _ = reader.read()
+            except Exception as e:
+                blink_error()
+
 
             if id:
                 print(f'card detected: {id}')
@@ -253,7 +257,6 @@ def rfid_loop():
 
                 elif state == 'empty':  #tag is not registered
                     blink_unregistered()
-                    return -1
 
 
     except KeyboardInterrupt:
