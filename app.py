@@ -21,9 +21,9 @@ LED_PIN_GREEN = 11  #17 BCM
 LED_PIN_RED = 13  #27 BCM
 
 auth = HTTPBasicAuth()
-#
+
 users = {
-    "nico": generate_password_hash("wU900#X6UToc")
+    "nico": 'pbkdf2:sha256:260000$zsP2eaQzXmqW9HTY$a936a0e560d21640d8cf5d01c77fb5ad8d21a9de56c088847a5785d307ac13c0'
 }
 
 def get_db_connection():
@@ -100,6 +100,7 @@ def index():
 @app.route('/YWRtaW4', methods=['GET', 'POST'])
 @auth.login_required
 def admin_view():
+
     if request.method == "POST" and "reset_worktime" in request.form:
         conn = get_db_connection()
         sql = f'DELETE from working_time'
