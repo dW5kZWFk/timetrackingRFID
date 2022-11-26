@@ -237,32 +237,31 @@ def rfid_loop():
         except Exception as e:
             blink_error()
 
-        while (1):
 
 
-            if id:
-                print(f'card detected: {id}')
-                state = check_state(id)
+        if id:
+            print(f'card detected: {id}')
+            state = check_state(id)
 
-                if state == '0':  #proceed with log in
-                    try:
-                        change_employee_state(id, 1)
-                        blink_log_in_success()
+            if state == '0':  #proceed with log in
+                try:
+                    change_employee_state(id, 1)
+                    blink_log_in_success()
 
-                    except Exception as e:
-                        print(e)
-                        blink_error()
+                except Exception as e:
+                    print(e)
+                    blink_error()
 
-                elif state == '1':  #proceed with log out
-                    try:
-                        log_out(id)
-                        blink_log_out_success()
-                    except Exception as e:
-                        print(e)
-                        blink_error()
+            elif state == '1':  #proceed with log out
+                try:
+                    log_out(id)
+                    blink_log_out_success()
+                except Exception as e:
+                    print(e)
+                    blink_error()
 
-                elif state == 'empty':  #tag is not registered
-                    blink_unregistered()
+            elif state == 'empty':  #tag is not registered
+                blink_unregistered()
 
 
     except KeyboardInterrupt:
@@ -273,8 +272,8 @@ if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(debug=True, use_reloader=False, host="0.0.0.0")).start()
 
     try:
-        #threading.Thread(target=lambda: rfid_loop()).start()
-        rfid_loop()
+        threading.Thread(target=lambda: rfid_loop()).start()
+        #rfid_loop()
     except Exception as e:
         blink_error_endless()
 
