@@ -130,13 +130,13 @@ def register():
                 GPIO.output(LED_PIN_RED, GPIO.LOW)
                 sleep(0.5)
                 try:
-                    id, _ = reader.read()
+                    new_id, _ = reader.read()
                     print(id)
                 except Exception as e:
                     print(e)
                     blink_error()
 
-                if id:
+                if new_id:
                     #prüfen ob Tag-ID bereits vergeben ist
                     if check_state(id) != "empty":
                         flash("Tag/Karte ist bereits registriert", "danger")
