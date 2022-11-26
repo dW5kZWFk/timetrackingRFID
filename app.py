@@ -78,21 +78,21 @@ def index():
     conn.close()
     return render_template('state.html',names=rows)
 
-@app.route('/YWRtaW4', methods=['GET'])
-def admin_view():
-
-    conn=get_db_connection()
-    sql=f'SELECT uid, date, worktime from working_time'
-    cur = conn.cursor()
-    rows = cur.execute(sql).fetchall()
-
-    #write csv:
-    with open('inventory_export.csv', 'w', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile, delimiter=',')
-        csvwriter.writerow(col_labels)
-        for row in results:
-            csvwriter.writerow(row)
-    return render_template('admin.html')
+#@app.route('/YWRtaW4', methods=['GET'])
+#def admin_view():
+#
+#    conn=get_db_connection()
+#    sql=f'SELECT employee_uid, date, worktime from working_time'
+#    cur = conn.cursor()
+#    rows = cur.execute(sql).fetchall()
+#
+#    #write csv:
+#    with open('inventory_export.csv', 'w', newline='') as csvfile:
+#        csvwriter = csv.writer(csvfile, delimiter=',')
+#        csvwriter.writerow(col_labels)
+#        for row in results:
+#            csvwriter.writerow(row)
+#    return render_template('admin.html')
 
 
 
@@ -151,7 +151,7 @@ def log_out(uid):
     print(f'today:{today}')
 
     #write to db
-    sql=f'INSERT INTO working_time (uid,date,time) values({uid},\'{today}\',\'{work_hours}\')'
+    sql=f'INSERT INTO working_time (employee_uid,date,time) values({uid},\'{today}\',\'{work_hours}\')'
     cur.execute(sql)
     conn.commit()
     conn.close()
