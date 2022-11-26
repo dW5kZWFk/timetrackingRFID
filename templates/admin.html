@@ -46,13 +46,13 @@
                     <i class="feather-16" data-feather="file-plus"></i> CSV-Datei erzeugen
 </button>
 
- <span id="csv_download_link" class="row mt-5 mb-5" style="display:none;">
+ <div id="csv_download_link" class="row mt-5 mb-5" style="display:none;">
             <button type="button" class="btn btn-outline-dark ms-2"  data-bs-toggle="tooltip" onclick="show_reset_table();" data-bs-placement="bottom">
-                <i class="feather-16" data-feather="download"></i> <a href="{{ url_for('working_time')}}"></a> Download
+                 <a href="{{ url_for('working_time')}}"> <i class="feather-16" data-feather="download"></i> Download</a>
             </button>
- </span>
+ </div>
 
-<br>
+
 <div id="reset_worktime_table" class="row mt-5" style="display:none;">
     <form method="POST">
         <button type="submit" name="reset_worktime" class="btn btn-danger ms-2"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
