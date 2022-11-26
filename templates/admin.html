@@ -50,14 +50,14 @@
             </button>
         </div>
 
-        <div id="csv_download_link" class="row mt-5 mb-5 d-flex" style="display:none;">
+        <div id="csv_download_link" class="row mt-5 mb-5" style="display:none;">
             <button type="button" class="btn btn-outline-dark w-50"  data-bs-toggle="tooltip" onclick="show_reset_table();" data-bs-placement="bottom">
                  <a style="text-decoration:none;" href="{{ url_for('working_time')}}"> <i class="feather-16" data-feather="download"></i> Download</a>
             </button>
         </div>
 
 
-        <div id="reset_worktime_table" class="row mt-5 d-flex" style="display:none;">
+        <div id="reset_worktime_table" class="row mt-5" style="display:none;">
             <button type="button" class="btn btn-danger w-50"  data-bs-toggle="modal" data-bs-target="#confirmModal">
                   <i class="feather-16" data-feather="alert-triangle"></i>  Tabelle mit Arbeitszeiten leeren
             </button>
