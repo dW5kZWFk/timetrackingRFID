@@ -120,7 +120,7 @@ def create_csv_ajax():
 
 
 @app.route('/working_time', methods=['GET'])
-def download_working_time_csv():
+def working_time():
     with open("working_time_export.csv", "r") as fp:
         csv = fp.read()
     return Response(csv, mimetype="text/csv")
