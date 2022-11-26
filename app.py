@@ -21,6 +21,7 @@ LED_PIN_GREEN = 11  #17 BCM
 LED_PIN_RED = 13  #27 BCM
 
 auth = HTTPBasicAuth()
+reader = SimpleMFRC522()
 
 users = {
     "nico": 'pbkdf2:sha256:260000$zsP2eaQzXmqW9HTY$a936a0e560d21640d8cf5d01c77fb5ad8d21a9de56c088847a5785d307ac13c0'
@@ -119,7 +120,7 @@ def admin_view():
 def register():
 
     if request.method=="POST" and "employee_name" in request.form:
-        reader = SimpleMFRC522()
+
 
         #toDO: check for existing names
         try:
@@ -127,7 +128,7 @@ def register():
                 print("huh")
                 GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
                 sleep(0.5)
-                GPIO.output(LED_PIN_RED, GPIO.LOW)
+                GPIO.output(LED_PIN_GREEN, GPIO.LOW)
                 sleep(0.5)
                 try:
                     new_id, _ = reader.read()
