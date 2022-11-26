@@ -131,6 +131,7 @@ def register():
                 #sleep(0.5)
                 try:
                     id, _ = reader.read()
+                    print(id)
                 except Exception as e:
                     print(e)
                     blink_error()
