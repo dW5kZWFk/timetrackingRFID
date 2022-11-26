@@ -4,7 +4,7 @@ import os
 import threading
 from datetime import datetime, timedelta
 
-from flask import Flask, request, send_file, jsonify, Response
+from flask import Flask, request, send_file, jsonify, Response, flash, redirect
 from flask import render_template
 import sqlite3
 from mfrc522 import SimpleMFRC522
@@ -15,6 +15,7 @@ app = Flask(__name__)
 
 LED_PIN_GREEN = 11  #17 BCM
 LED_PIN_RED = 13  #27 BCM
+
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
@@ -48,12 +49,14 @@ def blink_error():
         sleep(0.5)
     return
 
+
 def blink_error_endless():
-    while(1):
+    while (1):
         GPIO.output(LED_PIN_RED, GPIO.HIGH)
         sleep(0.5)
         GPIO.output(LED_PIN_RED, GPIO.LOW)
         sleep(0.5)
+
 
 #red and green blink 5 times
 def blink_unregistered():
@@ -66,6 +69,7 @@ def blink_unregistered():
         sleep(0.5)
     return
 
+
 #views........................................................................................
 
 #display employees currently at work
@@ -77,11 +81,19 @@ def index():
     cur = conn.cursor()
     rows = cur.execute(sql).fetchall()
     conn.close()
-    return render_template('state.html',names=rows)
+    return render_template('state.html', names=rows)
 
-@app.route('/YWRtaW4', methods=['GET'])
+
+@app.route('/YWRtaW4', methods=['GET', 'POST'])
 def admin_view():
-
+    if request.method == "POST" and "reset_worktime" in "request_form":
+        conn = get_db_connection()
+        sql = f'DELETE * from working_time'
+        cur = conn.cursor()
+        rows = cur.execute(sql).fetchall()
+        conn.close()
+        flash("Arbeitszeiten zurückgesetzt.", 'success')
+        return redirect("admin.html")
 
     return render_template('admin.html')
 
@@ -106,11 +118,13 @@ def create_csv_ajax():
 
     return jsonify("success")
 
-@app.route('/download_working_time_csv', methods=['GET'])
+
+@app.route('/working_time', methods=['GET'])
 def download_working_time_csv():
     with open("working_time_export.csv", "r") as fp:
-         csv = fp.read()
+        csv = fp.read()
     return Response(csv, mimetype="text/csv")
+
 
 #RFID functions..................................................................................
 #check whether employee is logged in or logged out
@@ -119,20 +133,20 @@ def check_state(uid):
     sql = f'SELECT state FROM employee_state WHERE uid=={uid}'
 
     cur = conn.cursor()
-    rows=cur.execute(sql).fetchone()
+    rows = cur.execute(sql).fetchone()
     conn.close()
 
-    if rows is None: #unregistered tag-ID
+    if rows is None:  #unregistered tag-ID
         return 'empty'
 
     return rows[0][0]
+
 
 #log in / out..............................................................................................
 
 #changes employee state to (-> currently at work (1) / currently not at work (0))
 def change_employee_state(uid, new_state):
     conn = get_db_connection()
-
 
     sql = f'UPDATE employee_state set state = {new_state}, start_time=DateTime(\'now\',\'localtime\') WHERE uid=={uid}'
 
@@ -145,29 +159,29 @@ def change_employee_state(uid, new_state):
 
 
 def log_out(uid):
-
     #get start time
     conn = get_db_connection()
     sql = f'SELECT datetime(start_time) FROM employee_state WHERE uid=={uid}'
 
     cur = conn.cursor()
     rows = cur.execute(sql).fetchall()
-    start_time=rows[0][0]
+    start_time = rows[0][0]
 
     #calculate work hours
-    start_dt=datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S") # str to datetime
-    end_dt= datetime.now()
+    start_dt = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")  # str to datetime
+    end_dt = datetime.now()
     print(start_dt)
     print(end_dt)
-    work_hours=  end_dt.replace(second=0,microsecond=0) - start_dt.replace(second=0, microsecond=0)  #rounded difference
+    work_hours = end_dt.replace(second=0, microsecond=0) - start_dt.replace(second=0,
+                                                                            microsecond=0)  #rounded difference
     #work_hours=end_dt-start_dt
-    today=datetime.today().strftime('%d.%m.%Y')
+    today = datetime.today().strftime('%d.%m.%Y')
 
     print(f'work_hours:{work_hours}')
     print(f'today:{today}')
 
     #write to db
-    sql=f'INSERT INTO working_time (employee_uid,date,time) values({uid},\'{today}\',\'{work_hours}\')'
+    sql = f'INSERT INTO working_time (employee_uid,date,time) values({uid},\'{today}\',\'{work_hours}\')'
     cur.execute(sql)
     conn.commit()
     conn.close()
@@ -179,6 +193,7 @@ def log_out(uid):
         raise Exception
 
     return
+
 
 #main loop..............................................................................................
 def rfid_loop():
@@ -198,14 +213,14 @@ def rfid_loop():
     GPIO.output(LED_PIN_RED, GPIO.LOW)
 
     try:
-        while(1):
-            id,_=reader.read()
+        while (1):
+            id, _ = reader.read()
 
             if id:
                 print(f'card detected: {id}')
-                state=check_state(id)
+                state = check_state(id)
 
-                if state=='0':      #proceed with log in
+                if state == '0':  #proceed with log in
                     try:
                         change_employee_state(id, 1)
                         blink_log_in_success()
@@ -214,7 +229,7 @@ def rfid_loop():
                         print(e)
                         blink_error()
 
-                elif state=='1':    #proceed with log out
+                elif state == '1':  #proceed with log out
                     try:
                         log_out(id)
                         blink_log_out_success()
@@ -222,7 +237,7 @@ def rfid_loop():
                         print(e)
                         blink_error()
 
-                elif state=='empty':    #tag is not registered
+                elif state == 'empty':  #tag is not registered
                     blink_unregistered()
                     return -1
 
