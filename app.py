@@ -88,7 +88,7 @@ def index():
 def admin_view():
     if request.method == "POST" and "reset_worktime" in request.form:
         conn = get_db_connection()
-        sql = f'DELETE * from working_time'
+        sql = f'DELETE from working_time'
         cur = conn.cursor()
         rows = cur.execute(sql).fetchall()
         conn.close()
