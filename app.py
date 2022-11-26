@@ -139,7 +139,7 @@ def register():
 
                 if new_id:
                     #prüfen ob Tag-ID bereits vergeben ist
-                    if check_state(id) != "empty":
+                    if check_state(new_id) != "empty":
                         flash("Tag/Karte ist bereits registriert", "danger")
                     #toDo: Prüfen, ob Name bereits vergeben ist
 
@@ -314,9 +314,9 @@ def rfid_loop():
 if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(debug=True, use_reloader=False, host="0.0.0.0")).start()
 
-    #try:
-    #    #rfid_loop()
-    #except Exception as e:
-    #    blink_error_endless()
+    try:
+        rfid_loop()
+    except Exception as e:
+        blink_error_endless()
 
 #flask run --host=0.0.0.0
