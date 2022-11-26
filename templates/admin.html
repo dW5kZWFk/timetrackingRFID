@@ -41,22 +41,22 @@
 
 <body>
 
-<div class="d-flex align-items-center justify-content-center">
-<button type="button" class="btn btn-outline-dark ms-2" id="generate_csv" data-bs-toggle="tooltip" onclick="save_csv_ajax();" data-bs-placement="bottom">
+<div class="d-flex align-items-center justify-content-center mt-5">
+<button type="button" class="btn btn-outline-dark mt-5" id="generate_csv" data-bs-toggle="tooltip" onclick="save_csv_ajax();" data-bs-placement="bottom">
                     <i class="feather-16" data-feather="file-plus"></i> CSV-Datei erzeugen
 </button>
-<br>
- <span id="csv_download_link" class="row" style="display:none;">
+
+ <span id="csv_download_link" class="row mt-5 mb-5" style="display:none;">
             <button type="button" class="btn btn-outline-dark ms-2"  data-bs-toggle="tooltip" onclick="show_reset_table();" data-bs-placement="bottom">
                 <i class="feather-16" data-feather="download"></i> <a href="{{ url_for('working_time')}}"></a> Download
-            <button>
+            </button>
  </span>
 
 <br>
 <div id="reset_worktime_table" class="row mt-5" style="display:none;">
     <form method="POST">
         <button type="submit" name="reset_worktime" class="btn btn-danger ms-2"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
-                  <i class="feather-16" data-feather="alert-triangle"></i>  Arbeitszeiten Tabelle zurücksetzen
+                  <i class="feather-16" data-feather="alert-triangle"></i>  Tabelle mit Arbeitszeiten leeren
         </button>
 
     </form>
