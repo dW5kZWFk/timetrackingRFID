@@ -8,38 +8,45 @@
 <meta http-equiv="refresh" content="10">
 </head>
 <body>
-<h1>Arbeitszeiterfassung:</h1>
-<b>Derzeitig angemeldet:</b> <br>
-{% for name in names %}
-    <ul>
-        <li>{{name.name}}</li> <br>
-    </ul>
-{% endfor %}
+<fieldset class="d-flex justify-content-center">
+<legend>Arbeitszeiterfassung:</legend>
 
-<br><br><br>
-<b>Farbcodes:</b>
+        <b>Derzeitig angemeldet:</b> <br>
+        {% for name in names %}
+            <ul>
+                <li>{{name.name}}</li> <br>
+            </ul>
+        {% endfor %}
 
-    <table>
-        <tr>
-            <th>Code</th>
-            <th>Bedeutung</th>
-        </tr>
-        <tr>
-            <td>grüne led an (3 sek)</td><td>Erfolgreich angemeldet</td>
-        </tr>
-        <tr>
-            <td>rote led an (3 sek)</td><td>Erfolgreich abgemeldet</td>
-        </tr>
-        <tr>
-            <td>grüne + rote led blinken </td><td>Tag / Karte nicht registriert</td>
-        </tr>
-        <tr>
-            <td>rote led blinkt 10 mal</td><td>Anmeldung / Abmeldung fehlgeschlagen</td>
-        </tr>
-        <tr>
-            <td>rote led blinkt fortlaufend</td><td>RFID-Reader-Thread abgestürzt (->Neustart erforderlich)</td>
-        </tr>
-    </table>
-<p>Anmelde / Abmelde -Status werden persistent u. unabhängig von Prozess gespeichert (-> Neustart erfordert keine erneute Anmeldung)</p>
+        <br><br><br>
+        <b>Farbcodes:</b>
+
+            <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Bedeutung</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>grüne led an (3 sek)</td><td>Erfolgreich angemeldet</td>
+                </tr>
+                <tr>
+                    <td>rote led an (3 sek)</td><td>Erfolgreich abgemeldet</td>
+                </tr>
+                <tr>
+                    <td>grüne + rote led blinken </td><td>Tag / Karte nicht registriert</td>
+                </tr>
+                <tr>
+                    <td>rote led blinkt 10 mal</td><td>Anmeldung / Abmeldung fehlgeschlagen</td>
+                </tr>
+                <tr>
+                    <td>rote led blinkt fortlaufend</td><td>RFID-Reader-Thread abgestürzt (->Neustart erforderlich)</td>
+                </tr>
+            </tbody>
+            </table>
+        <p>Anmelde / Abmelde -Status werden persistent u. unabhängig von Prozess gespeichert (-> Neustart erfordert keine erneute Anmeldung)</p>
+</fieldset>
 </body>
 </html>
