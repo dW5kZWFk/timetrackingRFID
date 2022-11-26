@@ -114,6 +114,45 @@ def admin_view():
     return render_template('admin.html')
 
 
+@app.route('/register',methods=['GET','POST'])
+@auth.login_required
+def register():
+
+    if request.method=="POST" and "employee_name" in request.form:
+        reader = SimpleMFRC522()
+
+        #toDO: check for existing names
+        try:
+            while(1):
+                GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
+                sleep(0.5)
+                GPIO.output(LED_PIN_RED, GPIO.LOW)
+                try:
+                    id, _ = reader.read()
+
+                    if id:
+                        #prüfen ob Tag-ID bereits vergeben ist
+                        if check_state(id) != "empty":
+                            flash("Tag/Karte ist bereits registriert", "danger")
+                        #toDo: Prüfen, ob Name bereits vergeben ist
+
+                        else:
+                            conn=get_db_connection()
+                            cur=conn.cursor()
+                            values=(request.form.get("employee_name"))
+                            sql = f'INSERT INTO working_time (employee_uid,date,time) values(?)'
+                            cur.execute(sql,values)
+                            conn.commit()
+                            conn.close()
+                except Exception as e:
+                    blink_error()
+
+
+
+
+        except Exception:
+            flash("Unspezifische Fehlermeldung (register user Loop).","danger")
+
 #ajax-csv-functions.............................................................................
 @app.route('/create_csv_ajax', methods=['GET'])
 def create_csv_ajax():

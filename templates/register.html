@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Arbeitszeiterfassung-Registrierung</title>
+        <script
+			  src="https://code.jquery.com/jquery-3.6.1.js"
+			  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+			  crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js" integrity="sha512-24XP4a9KVoIinPFUbcnjIjAjtS59PUoxQj3GNVpWc86bCqPuy3YxAcxJrxFCxXe4GHtAumCbO2Ze2bddtuxaRw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<h1>Mitarbeiter registrieren</h1>
+
+<form>
+  <div class="form-group">
+    <label >Name des Mitarbeiters</label>
+    <input type="text" name="employee_name" class="form-control" aria-describedby="Name">
+    <small id="emailHelp" class="form-text text-muted">Es wird geprüft, ob der Name bereits vergeben ist. Der Name darf keine Sonderzeichen enthalten.</small>
+  </div>
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</body>
+
+<script>
+    $('input').bind('input', function() {
+  var c = this.selectionStart,
+      r = /[^a-z0-9 .]/gi,
+      v = $(this).val();
+  if(r.test(v)) {
+    $(this).val(v.replace(r, ''));
+    c--;
+  }
+  this.setSelectionRange(c, c);
+});
+</script>
+</html>
