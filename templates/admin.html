@@ -41,27 +41,29 @@
 
 <body>
 
-
-<button type="button" class="btn btn-outline-dark ms-2"  data-bs-toggle="tooltip" onclick="save_csv_ajax();" data-bs-placement="bottom" title="CSV-Datei aus Arbeitszeiten erstellen.">
-                    <i class="feather-16" data-feather="save"></i>
+<div class="d-flex align-items-center justify-content-center">
+<button type="button" class="btn btn-outline-dark ms-2" id="generate_csv" data-bs-toggle="tooltip" onclick="save_csv_ajax();" data-bs-placement="bottom">
+                    <i class="feather-16" data-feather="file-plus"></i> CSV-Datei erzeugen
 </button>
 <br>
- <span id="csv_download_link" style="display:none;">
-                <a href="{{ url_for('working_time')}}">Download CSV</a>
+ <span id="csv_download_link" class="row" style="display:none;">
+            <button type="button" class="btn btn-outline-dark ms-2"  data-bs-toggle="tooltip" onclick="show_reset_table();" data-bs-placement="bottom">
+                <i class="feather-16" data-feather="download"></i> <a href="{{ url_for('working_time')}}"></a> Download
+            <button>
  </span>
 
 <br>
-<div id="reset_worktime_table" style="display:none;">
+<div id="reset_worktime_table" class="row mt-5" style="display:none;">
     <form method="POST">
         <button type="submit" name="reset_worktime" class="btn btn-danger ms-2"  data-bs-toggle="tooltip" data-bs-placement="bottom" >
-                    Arbeitszeiten Tabelle zurücksetzen
+                  <i class="feather-16" data-feather="alert-triangle"></i>  Arbeitszeiten Tabelle zurücksetzen
         </button>
 
     </form>
 
 </div>
 
-
+</div>
 </body>
 
 <script>
@@ -85,9 +87,7 @@ function save_csv_ajax() {
 
                             if(resp=='success'){
 					            $('#csv_download_link').show();
-					            $('#ajax_flash_danger').show();
-					            $('#ajax_flash_danger_msg').html("Arbeitszeiten Tabelle zurücksetzen!");
-					            $('#reset_worktime_table').show();
+					            $('#generate_csv').hide()
 					            feather.replace();
 					            return;
                             }
@@ -95,5 +95,10 @@ function save_csv_ajax() {
     	});
 }
 
+function show_reset_table(){
+
+$('#reset_worktime_table').show();
+
+}
 </script>
 </html>
