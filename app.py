@@ -104,7 +104,8 @@ def admin_view():
         conn = get_db_connection()
         sql = f'DELETE from working_time'
         cur = conn.cursor()
-        rows = cur.execute(sql).fetchall()
+        cur.execute(sql)
+        conn.commit()
         conn.close()
         flash("Arbeitszeiten zurückgesetzt.", 'success')
         return redirect('/YWRtaW4')
