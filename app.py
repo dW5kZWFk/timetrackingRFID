@@ -94,7 +94,7 @@ def admin_view():
         rows = cur.execute(sql).fetchall()
         conn.close()
         flash("Arbeitszeiten zurückgesetzt.", 'success')
-        return redirect("admin.html")
+        return redirect('/YWRtaW4')
 
     return render_template('admin.html')
 
