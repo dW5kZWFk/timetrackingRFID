@@ -124,9 +124,10 @@ def register():
         #toDO: check for existing names
         try:
             while(1):
-                GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
-                sleep(0.5)
-                GPIO.output(LED_PIN_RED, GPIO.LOW)
+                #GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
+                #sleep(0.5)
+                #GPIO.output(LED_PIN_RED, GPIO.LOW)
+                #sleep(0.5)
                 try:
                     id, _ = reader.read()
 
