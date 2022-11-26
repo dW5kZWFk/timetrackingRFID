@@ -15,11 +15,12 @@
 <body>
 <h1>Mitarbeiter registrieren</h1>
 
-<form>
+<form method="Post">
   <div class="form-group">
     <label >Name des Mitarbeiters</label>
     <input type="text" name="employee_name" class="form-control" aria-describedby="Name">
     <small id="emailHelp" class="form-text text-muted">Es wird geprüft, ob der Name bereits vergeben ist. Der Name darf keine Sonderzeichen enthalten.</small>
+    <small>Nach dem Submit blinkt die grüne LED. Dann Tag/Karte an den Reader halten.</small>
   </div>
 <button type="submit" class="btn btn-primary">Submit</button>
 </form>
