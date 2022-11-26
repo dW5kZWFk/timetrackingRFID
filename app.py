@@ -21,7 +21,6 @@ LED_PIN_GREEN = 11  #17 BCM
 LED_PIN_RED = 13  #27 BCM
 
 auth = HTTPBasicAuth()
-reader = SimpleMFRC522()
 
 users = {
     "nico": 'pbkdf2:sha256:260000$zsP2eaQzXmqW9HTY$a936a0e560d21640d8cf5d01c77fb5ad8d21a9de56c088847a5785d307ac13c0'
@@ -232,36 +231,35 @@ def rfid_loop():
 
     try:
 
-        try:
-            id, _ = reader.read()
-        except Exception as e:
-            blink_error()
+        while(1):
+            try:
+                id, _ = reader.read()
+            except Exception as e:
+                blink_error()
 
+            if id:
+                print(f'card detected: {id}')
+                state = check_state(id)
 
+                if state == '0':  #proceed with log in
+                    try:
+                        change_employee_state(id, 1)
+                        blink_log_in_success()
 
-        if id:
-            print(f'card detected: {id}')
-            state = check_state(id)
+                    except Exception as e:
+                        print(e)
+                        blink_error()
 
-            if state == '0':  #proceed with log in
-                try:
-                    change_employee_state(id, 1)
-                    blink_log_in_success()
+                elif state == '1':  #proceed with log out
+                    try:
+                        log_out(id)
+                        blink_log_out_success()
+                    except Exception as e:
+                        print(e)
+                        blink_error()
 
-                except Exception as e:
-                    print(e)
-                    blink_error()
-
-            elif state == '1':  #proceed with log out
-                try:
-                    log_out(id)
-                    blink_log_out_success()
-                except Exception as e:
-                    print(e)
-                    blink_error()
-
-            elif state == 'empty':  #tag is not registered
-                blink_unregistered()
+                elif state == 'empty':  #tag is not registered
+                    blink_unregistered()
 
 
     except KeyboardInterrupt:
