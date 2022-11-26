@@ -27,6 +27,8 @@ users = {
     "nico": 'pbkdf2:sha256:260000$zsP2eaQzXmqW9HTY$a936a0e560d21640d8cf5d01c77fb5ad8d21a9de56c088847a5785d307ac13c0'
 }
 
+stop_scanner=False
+
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -118,18 +120,20 @@ def admin_view():
 @app.route('/register',methods=['GET','POST'])
 @auth.login_required
 def register():
-
+    global stop_scanner
     if request.method=="POST" and "employee_name" in request.form:
 
-
+        #destroy rfid loop
+        stop_scanner=True
+        GPIO.setmode(GPIO.BOARD)
         #toDO: check for existing names
         try:
             while(1):
                 print("huh")
-                #GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
-                #sleep(0.5)
-                #GPIO.output(LED_PIN_GREEN, GPIO.LOW)
-                #sleep(0.5)
+                GPIO.output(LED_PIN_GREEN, GPIO.HIGH)
+                sleep(0.5)
+                GPIO.output(LED_PIN_GREEN, GPIO.LOW)
+                sleep(0.5)
                 try:
                     new_id, _ = reader.read()
                     print(id)
@@ -152,11 +156,19 @@ def register():
                         conn.commit()
                         conn.close()
                         flash(f'Tag/Karte wurde für {name} registriert.',"success")
+
+                    #restart rfid loop:
+                    GPIO.cleanup()
+                    stop_scanner = False
+                    rfid_loop()
                     return redirect("register.html")
 
 
         except Exception as e:
             print(e)
+            GPIO.cleanup()
+            stop_scanner = False
+            rfid_loop()
             flash("Unspezifische Fehlermeldung (register user Loop).","danger")
     return render_template("register.html")
 
@@ -262,7 +274,7 @@ def rfid_loop():
     print("scanning for cards")
     #register rfid scanner
     reader = SimpleMFRC522()
-
+    global stop_scanner
     #register leds
     #SimpleMFRC522 uses GPIO BOARD Mode !
 
@@ -276,6 +288,12 @@ def rfid_loop():
 
     try:
         while (1):
+
+            #leave loop when user registration is called via flask server
+            if stop_scanner:
+                GPIO.cleanup()
+                break
+
             try:
                 id, _ = reader.read()
             except Exception as e:
@@ -315,7 +333,8 @@ if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(debug=True, use_reloader=False, host="0.0.0.0")).start()
 
     try:
-        threading.Thread(target=lambda: rfid_loop()).start()
+        #threading.Thread(target=lambda: rfid_loop()).start()
+        rfid_loop()
     except Exception as e:
         blink_error_endless()
 
