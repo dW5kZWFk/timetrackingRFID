@@ -312,9 +312,9 @@ def rfid_loop():
 if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(debug=True, use_reloader=False, host="0.0.0.0")).start()
 
-    try:
-        rfid_loop()
-    except Exception as e:
-        blink_error_endless()
+    #try:
+    #    #rfid_loop()
+    #except Exception as e:
+    #    blink_error_endless()
 
 #flask run --host=0.0.0.0
