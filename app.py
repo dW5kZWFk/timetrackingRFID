@@ -17,8 +17,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '76423486360973543216824'
 
-LED_PIN_GREEN = 11  #17 BCM
-LED_PIN_RED = 13  #27 BCM
+LED_PIN_GREEN = 13  #27 BCM
+LED_PIN_RED = 11  #17 BCM
 
 auth = HTTPBasicAuth()
 
@@ -29,7 +29,7 @@ users = {
 stop_scanner=False
 
 def get_db_connection():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('/root/timtrackingRFID/database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
