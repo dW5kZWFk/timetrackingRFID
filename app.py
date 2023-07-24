@@ -15,7 +15,7 @@ from time import sleep, strptime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '76423486360973543216824'
+app.config['SECRET_KEY'] = #replace example: '76423486360973543216824' 
 
 LED_PIN_GREEN = 13  #27 BCM
 LED_PIN_RED = 11  #17 BCM
@@ -23,7 +23,8 @@ LED_PIN_RED = 11  #17 BCM
 auth = HTTPBasicAuth()
 
 users = {
-    "nico": 'pbkdf2:sha256:260000$zsP2eaQzXmqW9HTY$a936a0e560d21640d8cf5d01c77fb5ad8d21a9de56c088847a5785d307ac13c0'
+    #replace example: 
+    #"admin": 'pbkdf2:sha256:260000$zsP2eaQzXmqW9HTY$a936a0e560d21640d8cf5d01c77fb5ad8d21a9de56c088847a5785d307ac13c0'
 }
 #
 stop_scanner=False
